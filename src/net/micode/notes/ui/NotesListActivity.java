@@ -71,6 +71,7 @@ import net.micode.notes.tool.ResourceParser;
 import net.micode.notes.ui.NotesListAdapter.AppWidgetAttribute;
 import net.micode.notes.widget.NoteWidgetProvider_2x;
 import net.micode.notes.widget.NoteWidgetProvider_4x;
+import net.micode.notes.gtask.data.Reminder;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -950,5 +951,26 @@ public class NotesListActivity extends Activity implements OnClickListener, OnIt
             }
         }
         return false;
+    }
+
+    private void saveNote(String title, String content, Date reminderDate) {
+
+        if (reminderDate != null) {
+            Reminder reminder = new Reminder(this, title, reminderDate);
+            reminder.setReminder();
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "My Channel";
+            String description = "Channel description";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel("your_channel_id", name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
+        }
+
     }
 }
